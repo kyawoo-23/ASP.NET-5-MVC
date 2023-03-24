@@ -15,9 +15,16 @@
     </div>
 </div>
 
-<div class="row">
-    @foreach (Note note in Model.Notes)
-    {
-        <partial name="_NoteCard" model="note" view-data="ViewData" />
-    }
-</div>
+@if (Model.Notes.Count() == 0)
+{
+    <p class="text-center mt-5">No notes created yet</p>
+}
+else
+{
+    <div class="row">
+        @foreach (Note note in Model.Notes)
+        {
+            <partial name="_NoteCard" model="note" view-data="ViewData" />
+        }
+    </div>
+}
