@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ModelBindingDemo.Data;
 using ModelBindingDemo.Models;
+using ModelBindingDemo.Repository;
+using ModelBindingDemo.ViewModel;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,71 +10,75 @@ namespace ModelBindingDemo.Controllers
 {
     public class DeveloperController : Controller
     {
-        private readonly static List<Developer> _developers = new()
+        private readonly IDeveloperRepository _devRepository;
+
+        public DeveloperController(IDeveloperRepository devRepository)
         {
-            new Developer {
-                Id = 1,
-                Name = "John",
-                Gender = "Male",
-                Type = "Frontend developer"
-            },
-            new Developer {
-                Id = 2,
-                Name = "Eric",
-                Gender = "Male",
-                Type = "Backend developer"
-            },
-        };
+            _devRepository = devRepository;
+        }
 
         public IActionResult Index()
         {
-            return View(_developers);
+            List<Developer> res = _devRepository.GetAllDevelopers();
+            return View(res);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            Developer developer = new Developer();
+            return View("Create", developer);
         }
 
         [HttpPost]
         public IActionResult Create(Developer developer)
         {
-            developer.Id = _developers.Count + 1;
-            _developers.Add(developer);
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                _devRepository.Insert(developer);
+                _devRepository.Save();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Developer data = _developers.FirstOrDefault(x => x.Id == id);
+            Developer data = _devRepository.GetDeveloperById(id);
             return data != null ? View(data) : RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
         public IActionResult Edit(Developer developer)
         {
-            Developer data = _developers.FirstOrDefault(x => x.Id == developer.Id);
-            data.Name = developer.Name;
-            data.Gender = developer.Gender;
-            data.Type = developer.Type;
+            //Developer data = _appContext.Developers.FirstOrDefault(x => x.Id == developer.Id);
+            //data.Name = developer.Name;
+            //data.Gender = developer.Gender;
+            //data.Type = developer.Type;
+            //_appContext.SaveChanges();
+            _devRepository.Update(developer);
+            _devRepository.Save();
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int id)
         {
-            Developer data = _developers.FirstOrDefault(x => x.Id == id);
-            if (data != null)
-            {
-                _developers.Remove(data);
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            
+            _devRepository.Delete(id);
+            _devRepository.Save();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Details(int id) {
+            Developer res = _devRepository.GetDeveloperById(id);
+            //List<Note> notes = _noteRepository.GetNotesByDevId(res.Id);
+            //DeveloperDetailsViewModel model = new DeveloperDetailsViewModel()
+            //{
+            //    Developer = res,
+            //    Note = notes
+            //};
+            return View(res);
         }
     }
 }

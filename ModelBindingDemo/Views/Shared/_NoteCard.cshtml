@@ -1,0 +1,21 @@
+﻿@model Note
+@{
+    bool IsShowButton = (bool)ViewData["ShowButton"];
+}
+
+<div class="col-12 col-md-6 col-lg-4 mb-3">
+    <div class="card border-primary">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <p class="card-text">@Model.Content</p>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+            <small class="card-text text-right">Created At: @Model.CreatedAt</small>
+            @{
+                if(IsShowButton){
+                    <a asp-action="Details" asp-controller="Developer" asp-route-id=@Model.DeveloperId>@Model.Developer.Name</a>
+                }
+            }
+        </div>
+    </div>
+</div>

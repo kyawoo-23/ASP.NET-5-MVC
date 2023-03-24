@@ -1,0 +1,22 @@
+﻿@model Developer
+@{
+    ViewData["Title"] = "Details";
+    ViewData["ShowButton"] = false;
+}
+
+<div class="card text-white bg-info mb-3">
+    <div class="d-flex align-items-center justify-content-around py-4">
+        <div>Id: @Model.Id</div>
+        <div>Name: @Model.Name</div>
+        <div>Gender: @Model.Gender</div>
+        <div>Type: @Model.Type</div>
+        <div>Notes Count: @Model.Notes.Count().ToString()</div>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (Note note in Model.Notes)
+    {
+        <partial name="_NoteCard" model="note" view-data="ViewData" />
+    }
+</div>

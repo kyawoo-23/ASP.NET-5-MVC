@@ -1,0 +1,20 @@
+﻿@model List<Note>
+@{
+    ViewData["Title"] = "Index";
+    ViewData["ShowButton"] = true;
+}
+
+<div class="row align-items-center">
+    <h3 class="pl-3">Notes List</h3>
+    <div class="ml-3">
+        <a class="btn btn-primary" asp-action="Create">Create</a>
+    </div>
+</div>
+
+<h1>Notes</h1>
+<div class="row mt-3">
+    @foreach (Note note in Model)
+    {
+        <partial name="_NoteCard" model="note" view-data="ViewData" />
+    }
+</div>

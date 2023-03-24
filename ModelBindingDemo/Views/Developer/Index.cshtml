@@ -3,9 +3,9 @@
     ViewData["Title"] = "Index";
 }
 <div class="row align-items-center">
-    <h3>Developers List</h3>
+    <h3 class="pl-3">Developers List</h3>
     <div class="ml-3">
-        <a class="btn btn-sm btn-success" asp-action="Create">Create</a>
+        <a class="btn btn-primary" asp-action="Create">Create</a>
     </div>
 </div>
 
@@ -13,19 +13,8 @@
     @{
         foreach (Developer dev in Model)
         {
-            <div class="col-12 col-md-6 col-lg-4 mb-3" asp-action="Details">
-                <div class="card border-info">
-                    <div class="card-body">
-                        <h5 class="card-title">@dev.Name</h5>
-                        <p class="card-text">Gender: @dev.Gender</p>
-                        <p class="card-text">Type: @dev.Type</p>
-                    </div>
-                    <div class="card-footer">
-                        <a class="btn btn-info" asp-action="Edit" asp-controller="Developer" asp-route-id="@dev.Id">Edit</a>
-                        <a class="btn btn-danger" asp-action="Delete" asp-controller="Developer" asp-route-id="@dev.Id">Delete</a>
-                    </div>
-                </div>
-            </div>
+            <partial name="_DevCard" model="dev" />
         }
     }
 </div>
+
