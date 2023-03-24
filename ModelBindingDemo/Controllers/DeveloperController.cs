@@ -69,6 +69,18 @@ namespace ModelBindingDemo.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        public IActionResult ConfirmDelete(int id)
+        {
+            Developer dev = _devRepository.GetDeveloperById(id);
+            ConfirmDeleteModal model = new ConfirmDeleteModal()
+            {
+                Id = dev.Id,
+                Name = dev.Name
+            };
+            return PartialView("_ConfirmDeleteModalPartial", model);
+        }
+
         [HttpGet]
         public IActionResult Details(int id) {
             Developer res = _devRepository.GetDeveloperById(id);

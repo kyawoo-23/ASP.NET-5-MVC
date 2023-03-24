@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ModelBindingDemo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -39,6 +40,9 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+        <div class="modal fade" id="confirmDeleteModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" id="confirmDeletePartial"></div>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">
@@ -52,5 +56,45 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script type="text/javascript">
+        $(function () {
+            $('.devConfirmDelete').click(function () {
+                var id = $(this).data('assigned-id');
+                $.ajax({
+                    type: "POST",
+                    url: "/Developer/ConfirmDelete",
+                    data: { "id": id },
+                    success: function (response) {
+                        $("#confirmDeletePartial").html(response);
+                    },
+                    failure: function (response) {
+                        alert("fail " + response.responseText);
+                    },
+                    error: function (response) {
+                        alert("error " + response.responseText);
+                    }
+                });
+            });
+
+            $('.noteConfirmDelete').click(function () {
+                var id = $(this).data('assigned-id');
+                var devId = $(this).data('dev-id');
+                $.ajax({
+                    type: "POST",
+                    url: "/Note/ConfirmDelete",
+                    data: { "id": id, "devId": devId },
+                    success: function (response) {
+                        $("#confirmDeletePartial").html(response);
+                    },
+                    failure: function (response) {
+                        alert("fail " + response.responseText);
+                    },
+                    error: function (response) {
+                        alert("error " + response.responseText);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

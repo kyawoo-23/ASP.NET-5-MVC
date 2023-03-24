@@ -18,7 +18,8 @@ namespace ModelBindingDemo.Repository
 
         public void Delete(int id)
         {
-            throw new System.NotImplementedException();
+            Note data = _appContext.Notes.FirstOrDefault(x => x.Id == id);
+            _appContext.Notes.Remove(data);
         }
 
         public List<Note> GetAllNotes()
@@ -28,7 +29,7 @@ namespace ModelBindingDemo.Repository
 
         public Note GetNoteById(int id)
         {
-            throw new System.NotImplementedException();
+            return _appContext.Notes.Include(d => d.Developer).FirstOrDefault(x => x.Id == id);
         }
 
         public void Insert(Note model)

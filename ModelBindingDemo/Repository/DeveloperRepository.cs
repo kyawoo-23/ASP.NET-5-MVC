@@ -17,7 +17,7 @@ namespace ModelBindingDemo.Repository
         public void Delete(int id)
         {
             Developer data = _appContext.Developers.FirstOrDefault(x => x.Id == id);
-            _appContext.Remove(data);
+            _appContext.Developers.Remove(data);
         }
 
         public List<Developer> GetAllDevelopers()

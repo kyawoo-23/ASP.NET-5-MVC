@@ -1,20 +1,28 @@
 ﻿@model Note
 @{
-    bool IsShowButton = (bool)ViewData["ShowButton"];
+    bool IsShowUser = (bool)ViewData["ShowUser"];
+    bool IsShowDeleteButton = (bool)ViewData["ShowDeleteButton"];
 }
 
 <div class="col-12 col-md-6 col-lg-4 mb-3">
     <div class="card border-primary">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mt-2">@Model.Title</h5>
+            @if (IsShowDeleteButton)
+            {
+                <button type="button" class="btn btn-outline-danger noteConfirmDelete" data-toggle="modal" data-target="#confirmDeleteModal" data-assigned-id=@Model.Id data-dev-id=@Model.Developer.Id>
+                    <i class="bi bi-trash-fill"></i>
+                </button>
+            }
+        </div>
         <div class="card-body">
-            <h5 class="card-title">@Model.Title</h5>
             <p class="card-text">@Model.Content</p>
         </div>
         <div class="card-footer d-flex justify-content-between">
             <small class="card-text text-right">Created At: @Model.CreatedAt</small>
-            @{
-                if(IsShowButton){
-                    <a asp-action="Details" asp-controller="Developer" asp-route-id=@Model.DeveloperId>@Model.Developer.Name</a>
-                }
+            @if (IsShowUser)
+            {
+                <a asp-action="Details" asp-controller="Developer" asp-route-id=@Model.DeveloperId>@Model.Developer.Name</a>
             }
         </div>
     </div>

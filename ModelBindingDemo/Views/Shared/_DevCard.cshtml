@@ -11,13 +11,9 @@
         </a>
         <div class="card-footer d-flex justify-content-end">
             <a class="btn btn-info mr-2" asp-action="Edit" asp-controller="Developer" asp-route-id="@Model.Id">Edit</a>
-            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#@("modal" + Model.Id)">
+            <button type="button" class="btn btn-outline-danger devConfirmDelete" data-toggle="modal" data-target="#confirmDeleteModal" data-assigned-id=@Model.Id>
                 Delete
             </button>
-            @{
-                ViewData["Question"] = $"Are you sure you want to delete {Model.Name}?";
-            }
-            <partial name="_CustomModal" view-data="ViewData" />
         </div>
     </div>
 </div>

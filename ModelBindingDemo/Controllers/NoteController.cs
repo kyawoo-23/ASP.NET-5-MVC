@@ -43,5 +43,25 @@ namespace ModelBindingDemo.Controllers
             _noteRepository.Save();
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult Delete(int id, int refDevId)
+        {
+            _noteRepository.Delete(id);
+            _noteRepository.Save();
+            return RedirectToAction("Details", "Developer", new { id= refDevId });
+        }
+
+        [HttpPost]
+        public IActionResult ConfirmDelete(int id, int devId)
+        {
+            Note note = _noteRepository.GetNoteById(id);
+            ConfirmDeleteModal model = new ConfirmDeleteModal()
+            {
+                Id = note.Id,
+                Name = note.Title,
+                refDevId = devId
+            };
+            return PartialView("_ConfirmDeleteModalPartial", model);
+        }
     }
 }
