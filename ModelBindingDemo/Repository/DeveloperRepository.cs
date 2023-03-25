@@ -16,7 +16,7 @@ namespace ModelBindingDemo.Repository
 
         public void Delete(int id)
         {
-            Developer data = _appContext.Developers.FirstOrDefault(x => x.Id == id);
+            Developer data = _appContext.Developers.FirstOrDefault(x => x.DeveloperId == id);
             _appContext.Developers.Remove(data);
         }
 
@@ -27,7 +27,11 @@ namespace ModelBindingDemo.Repository
 
         public Developer GetDeveloperById(int id)
         {
-            return _appContext.Developers.Include(d => d.Notes).FirstOrDefault(x => x.Id == id);
+            Developer dev = _appContext.Developers
+                .Where(d => d.DeveloperId == id)
+                .Include(s => s.Notes)
+                .FirstOrDefault(d => d.DeveloperId == id);
+            return dev;
         }
 
         public void Insert(Developer developer)

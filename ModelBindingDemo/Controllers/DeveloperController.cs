@@ -3,18 +3,24 @@ using ModelBindingDemo.Data;
 using ModelBindingDemo.Models;
 using ModelBindingDemo.Repository;
 using ModelBindingDemo.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 
 namespace ModelBindingDemo.Controllers
 {
     public class DeveloperController : Controller
     {
         private readonly IDeveloperRepository _devRepository;
+        private readonly ISkillRepository _skillRepository;
+        private readonly IDeveloperSkillRepository _devSkillRepository;
 
-        public DeveloperController(IDeveloperRepository devRepository)
+        public DeveloperController(IDeveloperRepository devRepository, ISkillRepository skillRepository, IDeveloperSkillRepository devSkillRepository)
         {
             _devRepository = devRepository;
+            _skillRepository = skillRepository;
+            _devSkillRepository = devSkillRepository;
         }
 
         public IActionResult Index()
@@ -26,8 +32,7 @@ namespace ModelBindingDemo.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            Developer developer = new Developer();
-            return View("Create", developer);
+            return View();
         }
 
         [HttpPost]
@@ -52,11 +57,6 @@ namespace ModelBindingDemo.Controllers
         [HttpPost]
         public IActionResult Edit(Developer developer)
         {
-            //Developer data = _appContext.Developers.FirstOrDefault(x => x.Id == developer.Id);
-            //data.Name = developer.Name;
-            //data.Gender = developer.Gender;
-            //data.Type = developer.Type;
-            //_appContext.SaveChanges();
             _devRepository.Update(developer);
             _devRepository.Save();
             return RedirectToAction(nameof(Index));
@@ -75,22 +75,85 @@ namespace ModelBindingDemo.Controllers
             Developer dev = _devRepository.GetDeveloperById(id);
             ConfirmDeleteModal model = new ConfirmDeleteModal()
             {
-                Id = dev.Id,
+                Id = dev.DeveloperId,
                 Name = dev.Name
             };
             return PartialView("_ConfirmDeleteModalPartial", model);
         }
 
         [HttpGet]
-        public IActionResult Details(int id) {
-            Developer res = _devRepository.GetDeveloperById(id);
-            //List<Note> notes = _noteRepository.GetNotesByDevId(res.Id);
-            //DeveloperDetailsViewModel model = new DeveloperDetailsViewModel()
-            //{
-            //    Developer = res,
-            //    Note = notes
-            //};
-            return View(res);
+        public IActionResult Details(int id)
+        {
+            Developer developer = _devRepository.GetDeveloperById(id);
+            List<DeveloperSkill> devSkills = _devSkillRepository.GetSkillLevelByDevId(id);
+            DeveloperEditSkillsViewModel model = new DeveloperEditSkillsViewModel()
+            {
+                Developer = developer,
+                DeveloperSkills = devSkills
+            };
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult EditSkills(int id)
+        {
+            Developer developer = _devRepository.GetDeveloperById(id);
+            List<Skill> skills = _skillRepository.GetAllSkills();
+            List<DeveloperSkill> devSkills = _devSkillRepository.GetSkillLevelByDevId(id);
+            DeveloperEditSkillsViewModel model = new DeveloperEditSkillsViewModel()
+            {
+                Developer = developer,
+                Skills = skills,
+                DeveloperSkills = devSkills
+            };
+            return View(model);
+        }
+
+        //[HttpPost]
+        //public IActionResult EditSkills(DeveloperSkill model, int devId)
+        //{
+        //    DeveloperSkill devSkill = new DeveloperSkill() {
+        //        DeveloperId = devId,
+        //        SkillId = model.SkillId,
+        //        SkillLevel = model.SkillLevel,
+        //    };
+        //    _devSkillRepository.Insert(devSkill);
+        //    _devSkillRepository.Save();
+        //    return RedirectToAction("Details", new { id = model.DeveloperId });
+        //}        
+
+        [HttpPost]
+        public IActionResult EditSkills(int devId, int[] devSkills, int[] devSkillsLevel)
+        {
+            for (int i = 0; i < devSkills.Length; i++)
+            {
+                DeveloperSkill devSkill = new DeveloperSkill()
+                {
+                    DeveloperId = devId,
+                    SkillId = devSkills[i],
+                    SkillLevel = devSkillsLevel[i],
+                };
+                _devSkillRepository.Insert(devSkill);
+            }
+            _devSkillRepository.Save();
+            return Json(new
+            {
+                success = true,
+                redirectToUrl = Url.Action("Details", "Developer",
+                new { id = devId }
+            )
+            });
+        }
+
+        [HttpPost]
+        public IActionResult GetSkillSelectorPartialView()
+        {
+            List<Skill> skills = _skillRepository.GetAllSkills();
+            SkillSelectorPartialViewModel model = new SkillSelectorPartialViewModel()
+            {
+                Skills = skills
+            };
+            return PartialView("_SkillSelectorPartialView", model);
         }
     }
 }

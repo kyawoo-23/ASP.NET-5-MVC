@@ -32,6 +32,8 @@ namespace ModelBindingDemo
             });
             services.AddScoped<IDeveloperRepository, DeveloperRepository>();
             services.AddScoped<INoteRepository, NoteRepository>();
+            services.AddScoped<ISkillRepository, SkillRepository>();
+            services.AddScoped<IDeveloperSkillRepository, DeveloperSkillRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

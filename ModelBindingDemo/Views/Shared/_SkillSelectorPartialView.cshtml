@@ -1,0 +1,23 @@
+﻿@model SkillSelectorPartialViewModel
+
+<div class="col-12 mt-3">
+    <div class="row">
+        <label for="skillName" class="col-sm-2 col-form-label">Skill Name</label>
+        <div class="col-4">
+            <select class="form-control" name="devSkills[]" asp-for="SkillId">
+                <option value="0" selected disabled>Choose a skill...</option>
+                @foreach (Skill skill in Model.Skills)
+                {
+                    <option class="text-capitalize" value=@skill.SkillId>@skill.SkillName</option>
+                }
+            </select>
+        </div>
+        <label for="skillLevel" class="col-1 col-form-label">Level</label>
+        <div class="col-3">
+            <input class="form-control" name="devSkillsLevel[]" asp-for="SkillLevel" value="1" min="1" max="10">
+        </div>
+        <div class="col-2 skill-remove">
+            <button class="w-100 btn btn-outline-danger">Remove</button>
+        </div>
+    </div>
+</div>

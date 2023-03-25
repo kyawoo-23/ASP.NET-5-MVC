@@ -11,6 +11,5 @@ namespace ModelBindingDemo.Repository
         void Update(Developer developer);
         void Delete(int id);
         void Save();
-
     }
 }

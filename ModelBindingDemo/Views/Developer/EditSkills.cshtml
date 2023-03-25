@@ -1,0 +1,94 @@
+﻿@model DeveloperEditSkillsViewModel
+
+<h1>Edit Skills of @Model.Developer.Name</h1>
+
+<div class="row mb-4">
+    @foreach (DeveloperSkill devSkill in Model.DeveloperSkills)
+    {
+        <div class="col-12 mt-3">
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Skill Name</label>
+                <div class="col-4">
+                    <select class="form-control" asp-for="@devSkill.Skill.SkillId">
+                        <option value="0" selected disabled>Choose a skill...</option>
+                        @foreach (Skill skill in Model.Skills)
+                        {
+                            <option class="text-capitalize" value=@skill.SkillId selected="@(skill.SkillId == devSkill.SkillId ? true : false)">@skill.SkillName</option>
+                        }
+                    </select>
+                </div>
+                <label class="col-1 col-form-label">Level</label>
+                <div class="col-3">
+                    <input class="form-control" asp-for="@devSkill.SkillLevel" readonly>
+                </div>
+                <div class="col-1 text-right">
+                    <button class="btn btn-outline-dark"><i class="bi bi-upload"></i></button>
+                </div>
+                <div class="col-1 text-right">
+                    <button class="btn btn-outline-danger"><i class="bi bi-trash-fill"></i></button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<hr />
+
+<div class="row mt-4 mb-3" id="skillContainer">
+    <div class="col-12">
+        <div class="row d-flex justify-content-between">
+            <label for="skills" class="col-sm-2 col-form-label">Skills</label>
+            <div class="col-sm-2 text-right">
+                <a class="btn btn-secondary text-white w-100" id="addSkillBtn">Add Skill</a>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="testBtn" class="btn btn-primary text-white float-right" data-dev-detailsid=@Model.Developer.DeveloperId>
+    Submit Skills
+</button>
+
+
+@section Scripts
+    {
+    <script>
+        $("#addSkillBtn").click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/Developer/GetSkillSelectorPartialView",
+                type: "POST",
+                success: function (result) {
+                    $("#skillContainer").append(result);
+                },
+                error: function (xhr, status, error) {
+                    console.log("An error occurred while loading the partial view.");
+                }
+            });
+        });
+        $("#skillContainer").on("click", ".skill-remove", function (e) {
+            e.preventDefault();
+            $(this).parent().parent().remove();
+        });
+
+        $('#testBtn').click(function (e) {
+            //e.preventDefault();
+            var devIdFromDetails = $(this).data('dev-detailsid');
+            var devSkills = $("select[name='devSkills[]']").map(function () { return $(this).val(); }).get();
+            var devSkillsLevel = $("input[name='devSkillsLevel[]']").map(function () { return $(this).val(); }).get();
+            $.ajax({
+                type: "POST",
+                url: "/Developer/EditSkills",
+                data: {
+                    "devId": devIdFromDetails,
+                    "devSkills": devSkills,
+                    "devSkillsLevel": devSkillsLevel
+                },
+                success: function (response) {
+                    window.location.href = response.redirectToUrl;
+                },
+                error: function (xhr, status, error) {
+                    console.log("An error occurred while posting details.");
+                }
+            });
+        });
+    </script>
+}

@@ -5,7 +5,7 @@ namespace ModelBindingDemo.Models
 {
     public class Developer
     {
-        public int Id { get; set; }
+        public int DeveloperId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -13,5 +13,6 @@ namespace ModelBindingDemo.Models
         [Required]
         public string Type { get; set; }
         public List<Note> Notes { get; set; }
+        public List<Skill> Skills { get; set; }
     }
 }

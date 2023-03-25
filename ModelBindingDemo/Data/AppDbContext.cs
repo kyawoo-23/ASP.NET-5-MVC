@@ -10,6 +10,19 @@ namespace ModelBindingDemo.Data
 
         public DbSet<Note> Notes { get; set; }
 
+        public DbSet<Skill> Skills { get; set; }
+
+        public DbSet<DeveloperSkill> DeveloperSkills { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            //builder.Entity<DeveloperSkill>().HasKey(ds => new { 
+            //    ds.DeveloperSkillId, 
+            //    ds.DeveloperId, 
+            //    ds.SkillId 
+            //});
+        }
+
         public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
         {
         }

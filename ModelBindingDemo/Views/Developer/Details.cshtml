@@ -1,28 +1,36 @@
-﻿@model Developer
+﻿@model DeveloperEditSkillsViewModel
 @{
     ViewData["Title"] = "Details";
     ViewData["ShowUser"] = false;
     ViewData["ShowDeleteButton"] = true;
 }
 
-<div class="card text-white bg-info mb-3">
-    <div class="d-flex align-items-center justify-content-around py-4">
-        <div>Id: @Model.Id</div>
-        <div>Name: @Model.Name</div>
-        <div>Gender: @Model.Gender</div>
-        <div>Type: @Model.Type</div>
-        <div>Notes Count: @Model.Notes.Count().ToString()</div>
+<div class="jumbotron">
+    <h1 class="display-4">Hello, @Model.Developer.Name! <small>#@Model.Developer.DeveloperId</small></h1>
+    <p class="lead">Gender: @Model.Developer.Gender | Type: @Model.Developer.Type</p>
+    <hr class="my-4">
+    <div class="d-flex flex-wrap">
+        @foreach (DeveloperSkill skill in Model.DeveloperSkills)
+        {
+            <div class="bg-dark rounded px-3 py-2 d-flex align-items-center mr-3 mb-3">
+                <div class="text-white text-capitalize">@skill.Skill.SkillName</div>
+                <div class="ml-2">
+                    <span class="badge badge-pill badge-light">lvl @skill.SkillLevel</span>
+                </div>
+            </div>
+        }
     </div>
+    <a class="btn btn-secondary float-right" asp-action="EditSkills" asp-route-id=@Model.Developer.DeveloperId>Edit Skills</a>
 </div>
 
-@if (Model.Notes.Count() == 0)
+@if (Model.Developer.Notes.Count() == 0)
 {
     <p class="text-center mt-5">No notes created yet</p>
 }
 else
 {
     <div class="row">
-        @foreach (Note note in Model.Notes)
+        @foreach (Note note in Model.Developer.Notes)
         {
             <partial name="_NoteCard" model="note" view-data="ViewData" />
         }
