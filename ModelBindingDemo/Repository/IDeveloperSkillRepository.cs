@@ -6,8 +6,10 @@ namespace ModelBindingDemo.Repository
 {
     public interface IDeveloperSkillRepository
     {
+        DeveloperSkill GetDeveloperSkillById(int id);
         List<DeveloperSkill> GetSkillLevelByDevId (int id);
         void Insert(DeveloperSkill model);
+        void Delete(int id);
         void Save();
     }
 }

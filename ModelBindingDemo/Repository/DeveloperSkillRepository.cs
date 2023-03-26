@@ -15,6 +15,20 @@ namespace ModelBindingDemo.Repository
             _appDbContext = appDbContext;
         }
 
+        public void Delete(int id)
+        {
+            DeveloperSkill devSkill = _appDbContext.DeveloperSkills.FirstOrDefault(ds => ds.DeveloperSkillId == id);
+            _appDbContext.DeveloperSkills.Remove(devSkill);
+        }
+
+        public DeveloperSkill GetDeveloperSkillById(int id)
+        {
+            return _appDbContext.DeveloperSkills
+                .Include(d => d.Developer)
+                .Include(s => s.Skill)
+                .FirstOrDefault(ds => ds.DeveloperSkillId == id);
+        }
+
         public List<DeveloperSkill> GetSkillLevelByDevId(int id)
         {
             var developerSkills = _appDbContext.DeveloperSkills

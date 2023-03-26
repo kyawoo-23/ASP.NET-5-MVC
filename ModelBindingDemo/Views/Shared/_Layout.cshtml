@@ -31,6 +31,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Note" asp-action="Index">Notes</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Skill" asp-action="Index">Skills</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -58,42 +61,42 @@
     @await RenderSectionAsync("Scripts", required: false)
     <script type="text/javascript">
         $(function () {
-            $('.devConfirmDelete').click(function () {
-                var id = $(this).data('assigned-id');
+            function confirmDelete(url, data) {
                 $.ajax({
                     type: "POST",
-                    url: "/Developer/ConfirmDelete",
-                    data: { "id": id },
+                    url: url,
+                    data: data,
                     success: function (response) {
                         $("#confirmDeletePartial").html(response);
-                    },
-                    failure: function (response) {
-                        alert("fail " + response.responseText);
                     },
                     error: function (response) {
                         alert("error " + response.responseText);
                     }
                 });
+            }
+
+            $('.devConfirmDelete').click(function () {
+                let id = $(this).data('assigned-id');
+                confirmDelete("/Developer/ConfirmDelete", { "id": id });
             });
 
             $('.noteConfirmDelete').click(function () {
-                var id = $(this).data('assigned-id');
-                var devId = $(this).data('dev-id');
-                $.ajax({
-                    type: "POST",
-                    url: "/Note/ConfirmDelete",
-                    data: { "id": id, "devId": devId },
-                    success: function (response) {
-                        $("#confirmDeletePartial").html(response);
-                    },
-                    failure: function (response) {
-                        alert("fail " + response.responseText);
-                    },
-                    error: function (response) {
-                        alert("error " + response.responseText);
-                    }
-                });
+                let id = $(this).data('assigned-id');
+                let devId = $(this).data('dev-id');
+                confirmDelete("/Note/ConfirmDelete", { "id": id, "devId": devId });
             });
+
+            $('.skillConfirmDelete').click(function () {
+                let id = $(this).data('assigned-id');
+                confirmDelete("/Skill/ConfirmDelete", { "id": id });
+            });
+
+            $('.devSkillConfirmDelete').click(function () {
+                let id = $(this).data('assigned-id');
+                let devId = $(this).data('dev-id'); 
+                confirmDelete("/DeveloperSkill/ConfirmDelete", { "id": id });
+            });
+
         });
     </script>
 </body>

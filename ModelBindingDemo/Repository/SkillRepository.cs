@@ -17,7 +17,8 @@ namespace ModelBindingDemo.Repository
 
         public void Delete(int id)
         {
-            throw new System.NotImplementedException();
+            Skill res = _appDbContext.Skills.FirstOrDefault(s => s.SkillId == id);
+            _appDbContext.Skills.Remove(res);
         }
 
         public List<Skill> GetAllSkills()
@@ -27,20 +28,20 @@ namespace ModelBindingDemo.Repository
 
         public Skill GetSkillById(int id)
         {
-            throw new System.NotImplementedException();
+            return _appDbContext.Skills.FirstOrDefault(s => s.SkillId == id);
         }
 
-        public void Insert(Note model)
+        public void Insert(Skill skill)
         {
-            throw new System.NotImplementedException();
+            _appDbContext.Skills.Add(skill);
         }
 
         public void Save()
         {
-            throw new System.NotImplementedException();
+            _appDbContext.SaveChanges();
         }
 
-        public void Update(Note note)
+        public void Update(Skill skill)
         {
             throw new System.NotImplementedException();
         }

@@ -76,7 +76,7 @@ namespace ModelBindingDemo.Controllers
             ConfirmDeleteModal model = new ConfirmDeleteModal()
             {
                 Id = dev.DeveloperId,
-                Name = dev.Name
+                Name = dev.Name,
             };
             return PartialView("_ConfirmDeleteModalPartial", model);
         }

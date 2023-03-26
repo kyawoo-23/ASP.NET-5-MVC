@@ -1,0 +1,13 @@
+﻿@model Skill
+
+<form method="post" asp-action="Create" asp-controller="Skill">
+    <div class="input-group mb-3 w-50">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">New Skill</span>
+        </div>
+        <input asp-for="@Model.SkillName" placeholder="Input skill name to be added here..." class="form-control">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Add</button>
+        </div>
+    </div>
+</form>
