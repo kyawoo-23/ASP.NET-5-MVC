@@ -125,24 +125,30 @@ namespace ModelBindingDemo.Controllers
         [HttpPost]
         public IActionResult EditSkills(int devId, int[] devSkills, int[] devSkillsLevel)
         {
-            for (int i = 0; i < devSkills.Length; i++)
+            try
             {
-                DeveloperSkill devSkill = new DeveloperSkill()
+                for (int i = 0; i < devSkills.Length; i++)
                 {
-                    DeveloperId = devId,
-                    SkillId = devSkills[i],
-                    SkillLevel = devSkillsLevel[i],
-                };
-                _devSkillRepository.Insert(devSkill);
+                    DeveloperSkill devSkill = new DeveloperSkill()
+                    {
+                        DeveloperId = devId,
+                        SkillId = devSkills[i],
+                        SkillLevel = devSkillsLevel[i],
+                    };
+                    _devSkillRepository.Insert(devSkill);
+                }
+                _devSkillRepository.Save();
+                return Json(new
+                {
+                    success = true,
+                    error = false,
+                    redirectToUrl = Url.Action("Details", "Developer", new { id = devId })
+                });
             }
-            _devSkillRepository.Save();
-            return Json(new
+            catch(Exception e)
             {
-                success = true,
-                redirectToUrl = Url.Action("Details", "Developer",
-                new { id = devId }
-            )
-            });
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost]

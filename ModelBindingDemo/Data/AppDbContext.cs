@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace ModelBindingDemo.Data
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext : DbContext
     {
         public DbSet<Developer> Developers { get; set; }
 
@@ -16,14 +16,32 @@ namespace ModelBindingDemo.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.Entity<DeveloperSkill>().HasKey(ds => new { 
-            //    ds.DeveloperSkillId, 
-            //    ds.DeveloperId, 
-            //    ds.SkillId 
-            //});
+            builder.Entity<Developer>()
+                .Property(d => d.Name)
+                .IsRequired();
+            builder.Entity<Developer>()
+                .Property(d => d.Gender)
+                .IsRequired();
+            builder.Entity<Developer>()
+                .Property(d => d.Type)
+                .IsRequired();
+
+            builder.Entity<Note>()
+                .Property(n => n.Title)
+                .IsRequired();
+            builder.Entity<Note>()
+                .Property(n => n.Content)
+                .IsRequired();
+
+            builder.Entity<Skill>()
+                .Property(s => s.SkillName)
+                .IsRequired();
+            builder.Entity<Skill>()
+                .HasIndex(s => s.SkillName)
+                .IsUnique();
         }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 

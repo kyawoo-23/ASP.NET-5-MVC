@@ -15,6 +15,11 @@ namespace ModelBindingDemo.Repository
             _appDbContext = appDbContext;
         }
 
+        public bool CheckSkillNameUniqueness(string skillName)
+        {
+            return _appDbContext.Skills.Any(s => s.SkillName == skillName);
+        }
+
         public void Delete(int id)
         {
             Skill res = _appDbContext.Skills.FirstOrDefault(s => s.SkillId == id);
@@ -23,7 +28,16 @@ namespace ModelBindingDemo.Repository
 
         public List<Skill> GetAllSkills()
         {
-            return _appDbContext.Skills.Include(s => s.Developers).ToList();
+            List<Skill> skills = _appDbContext.Skills
+                .Include(s => s.Developers)
+                .Select(s => new Skill
+                {
+                    SkillId = s.SkillId,
+                    SkillName = s.SkillName.Substring(0, 1).ToUpper() + s.SkillName.Substring(1).ToLower(),
+                    Developers = s.Developers
+                })
+                .ToList();
+            return skills;
         }
 
         public Skill GetSkillById(int id)

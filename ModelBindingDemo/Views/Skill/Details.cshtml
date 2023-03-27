@@ -1,0 +1,28 @@
+﻿@model List<DeveloperSkill>
+
+<div class="row align-items-center">
+    <h3 class="pl-3">
+        List of developers with
+        <span class="text-capitalize badge badge-dark badge-pill px-3 py-1">
+            <small class="font-weight-bold d-flex align-items-center">@Model[0].Skill.SkillName</small>
+        </span> skill
+    </h3>
+</div>
+
+<div class="row mt-3">
+    @foreach (DeveloperSkill devSkill in Model)
+    {
+        <div class="col-6 col-md-4 col-lg-3 mb-3">
+            <div class="card border-secondary">
+                <a class="text-decoration-none text-secondary" asp-controller="Developer" asp-action="Details" asp-route-id="@devSkill.DeveloperId">
+                    <div class="card-header d-flex justify-content-between">
+                        <h5 class="card-title mt-2"><i class="bi bi-person-fill mr-2"></i>@devSkill.Developer.Name</h5>
+                        <span class="w-25 badge badge-dark px-4 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-trophy-fill mr-1"></i>@devSkill.SkillLevel
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+</div>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ModelBindingDemo.Models;
 using ModelBindingDemo.Repository;
+using ModelBindingDemo.ViewModel;
 using System.Collections.Generic;
 
 namespace ModelBindingDemo.Controllers
@@ -9,24 +10,42 @@ namespace ModelBindingDemo.Controllers
     public class SkillController : Controller
     {
         private readonly ISkillRepository _skillRepository;
+        private readonly IDeveloperSkillRepository _devSkillRepository;
 
-        public SkillController(ISkillRepository skillRepository)
+        public SkillController(ISkillRepository skillRepository, IDeveloperSkillRepository devSkillRepository)
         {
             _skillRepository = skillRepository;
+            _devSkillRepository = devSkillRepository;
         }
 
-        public ActionResult Index()
+        public IActionResult Index()
         {
             List<Skill> skills = _skillRepository.GetAllSkills();
             return View(skills);
         }
 
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            List<DeveloperSkill> devSkill = _devSkillRepository.GetSkillLevelBySkillId(id);
+            return View(devSkill);
+        }
+
         [HttpPost]
         public IActionResult Create(Skill skill)
         {
-            _skillRepository.Insert(skill);
-            _skillRepository.Save();
-            return RedirectToAction(nameof(Index));
+            if (_skillRepository.CheckSkillNameUniqueness(skill.SkillName))
+            {
+                ModelState.AddModelError(nameof(skill.SkillName), "The skill name already exists.");
+            }
+            if (ModelState.IsValid)
+            {
+                _skillRepository.Insert(skill);
+                _skillRepository.Save();
+                return RedirectToAction(nameof(Index));
+            }
+            List<Skill> allSkills = _skillRepository.GetAllSkills();
+            return View("Index", allSkills);
         }
 
         public IActionResult Delete(int id)

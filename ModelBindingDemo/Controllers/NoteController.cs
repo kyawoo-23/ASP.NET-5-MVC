@@ -20,8 +20,6 @@ namespace ModelBindingDemo.Controllers
         public IActionResult Index()
         {
             List<Note> Note = _noteRepository.GetAllNotes();
-            //NoteViewModel model = new NoteViewModel() { Note = Note };
-            //return View(model);
             return View(Note);
         }
 

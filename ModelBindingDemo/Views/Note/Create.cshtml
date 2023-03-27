@@ -10,7 +10,7 @@
         <label for="name" class="col-sm-2 col-form-label">Select Dev</label>
         <div class="col-sm-10">
             <select class="form-control" asp-for="Note.DeveloperId">
-                <option selected>Choose a developer...</option>
+                <option selected disabled>Choose a developer...</option>
                 @foreach(Developer dev in Model.Developer){
                     <option value=@dev.DeveloperId>@dev.Name</option>
                 }

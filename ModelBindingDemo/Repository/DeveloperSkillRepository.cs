@@ -2,6 +2,7 @@
 using ModelBindingDemo.Data;
 using ModelBindingDemo.Models;
 using ModelBindingDemo.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,17 +32,36 @@ namespace ModelBindingDemo.Repository
 
         public List<DeveloperSkill> GetSkillLevelByDevId(int id)
         {
-            var developerSkills = _appDbContext.DeveloperSkills
+            List<DeveloperSkill> devSkill = _appDbContext.DeveloperSkills
                 .Where(ds => ds.DeveloperId == id)
                 .Include(d => d.Developer)
                 .Include(s => s.Skill)
                 .ToList();
-            return developerSkills;
+            return devSkill;
+        }
+
+        public List<DeveloperSkill> GetSkillLevelBySkillId(int id)
+        {
+            List<DeveloperSkill> devSkill = _appDbContext.DeveloperSkills
+                .Where(ds => ds.SkillId == id)
+                .Include(d => d.Developer)
+                .Include(s => s.Skill)
+                .ToList();
+            return devSkill;
         }
 
         public void Insert(DeveloperSkill model)
         {
-            _appDbContext.DeveloperSkills.Add(model);
+            var exists = _appDbContext.DeveloperSkills
+                .FirstOrDefault(ds => ds.DeveloperId == model.DeveloperId && ds.SkillId == model.SkillId);
+            if (exists != null)
+            {
+                throw new Exception("Duplicate skill found");
+            }
+            else
+            {
+                _appDbContext.DeveloperSkills.Add(model);
+            }
         }
 
         public void Save()

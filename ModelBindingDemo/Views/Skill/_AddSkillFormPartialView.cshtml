@@ -5,9 +5,10 @@
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">New Skill</span>
         </div>
-        <input asp-for="@Model.SkillName" placeholder="Input skill name to be added here..." class="form-control">
+        <input asp-for="SkillName" placeholder="Input skill name to be added here..." class="form-control">
         <div class="input-group-append">
             <button class="btn btn-primary" type="submit">Add</button>
         </div>
     </div>
+    <span asp-validation-for="SkillName" class="text-danger"></span>
 </form>
