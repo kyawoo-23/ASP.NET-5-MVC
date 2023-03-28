@@ -44,7 +44,7 @@ namespace ModelBindingDemo.Repository
 
         public void Update(Note note)
         {
-            throw new System.NotImplementedException();
+            _appContext.Entry(note).State = EntityState.Modified;
         }
     }
 }

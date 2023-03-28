@@ -34,9 +34,9 @@ namespace ModelBindingDemo.Controllers
         [HttpPost]
         public IActionResult Create(Skill skill)
         {
-            if (_skillRepository.CheckSkillNameUniqueness(skill.SkillName))
+            if (_skillRepository.IsSkillNameDuplicate(skill.SkillName))
             {
-                ModelState.AddModelError(nameof(skill.SkillName), "The skill name already exists.");
+                ModelState.AddModelError(nameof(skill.SkillName), "The skill name already exists!");
             }
             if (ModelState.IsValid)
             {
@@ -65,6 +65,27 @@ namespace ModelBindingDemo.Controllers
                 Name = skill.SkillName
             };
             return PartialView("_ConfirmDeleteModalPartial", model);
+        }
+
+        [HttpPost]
+        public IActionResult Update(Skill skill)
+        {
+            if (_skillRepository.IsSkillNameDuplicate(skill.SkillName))
+            {
+                ModelState.AddModelError(nameof(skill.SkillName), "The skill name already exists!");
+            }
+            if (ModelState.IsValid)
+            {
+                _skillRepository.Update(skill);
+                _skillRepository.Save();
+
+                TempData["SuccessMessage"] = "Skill name updated successfully!";
+                return RedirectToAction(nameof(Index));
+            }
+            List<Skill> allSkills = _skillRepository.GetAllSkills();
+            //ModelState.Clear();
+            return View("Index", allSkills);
+            //return RedirectToAction("Index");
         }
     }
 }

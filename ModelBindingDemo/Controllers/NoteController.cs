@@ -61,5 +61,20 @@ namespace ModelBindingDemo.Controllers
             };
             return PartialView("_ConfirmDeleteModalPartial", model);
         }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Note note = _noteRepository.GetNoteById(id);
+            return View(note);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Note note)
+        {
+            _noteRepository.Update(note);
+            _noteRepository.Save();
+            return RedirectToAction("Details", "Developer", new { id = note.DeveloperId });
+        }
     }
 }

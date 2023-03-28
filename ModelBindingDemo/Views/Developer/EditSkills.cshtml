@@ -37,9 +37,9 @@
 </div>
 <hr />
 
-<div class="alert alert-danger alert-dismissible" role="alert" id="duplicateAlert">
-    <strong>Duplicate Data!</strong> You should check in on some of the fields below and try again.
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<div class="alert alert-danger" role="alert" id="skillInsertAlert">
+    <strong id="titleSkillInsertAlert"></strong> You should check in on some of the fields below and try again.
+    <button type="button" class="close" aria-label="Close" id="closeSkillInsertAlert">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
@@ -56,16 +56,16 @@
 </div>
 <div class="row justify-content-end mt-4 mb-5">
     <div class="col-2">
-        <button id="testBtn" class="btn btn-primary text-white w-100" data-dev-detailsid=@Model.Developer.DeveloperId>
+        <button id="submitSkillBtn" class="btn btn-primary text-white w-100" data-dev-detailsid=@Model.Developer.DeveloperId>
             Submit Skills
         </button>
     </div>
 </div>
 
 @section Scripts
-    {
+{
     <script>
-        $("#duplicateAlert").hide();
+        $("#skillInsertAlert").hide();
 
         $("#addSkillBtn").click(function (e) {
             e.preventDefault();
@@ -85,30 +85,44 @@
             $(this).parent().parent().remove();
         });
 
-        $('#testBtn').click(function (e) {
+        $('#submitSkillBtn').click(function (e) {
             e.preventDefault();
+            $("#skillInsertAlert").hide();
             var devIdFromDetails = $(this).data('dev-detailsid');
             var devSkills = $("select[name='devSkills[]']").map(function () { return $(this).val(); }).get();
             var devSkillsLevel = $("input[name='devSkillsLevel[]']").map(function () { return $(this).val(); }).get();
-            $.ajax({
-                type: "POST",
-                url: "/Developer/EditSkills",
-                data: {
-                    "devId": devIdFromDetails,
-                    "devSkills": devSkills,
-                    "devSkillsLevel": devSkillsLevel
-                },
-                success: function (response) {
-                    window.location.href = response.redirectToUrl;
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.status === 400) {
-                        $("#duplicateAlert").show();
-                    } else {
-                        alert("An expected error occurred: " + error);
+
+            console.log(devSkills.length === 0);
+            if (devSkills.length != 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Developer/EditSkills",
+                    data: {
+                        "devId": devIdFromDetails,
+                        "devSkills": devSkills,
+                        "devSkillsLevel": devSkillsLevel
+                    },
+                    success: function (response) {
+                        window.location.href = response.redirectToUrl;
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 400) {
+                            $("#skillInsertAlert").show();
+                            $("#titleSkillInsertAlert").text(xhr.responseText);
+                        } else {
+                            alert("An expected error occurred: " + error);
+                        }
                     }
-                }
-            });
+                });
+            }
+            else {
+                $("#skillInsertAlert").show();
+                $("#titleSkillInsertAlert").text("Please select at least one skill name!");
+            }
+        });
+
+        $("#closeSkillInsertAlert").click(function (e) {
+            $("#skillInsertAlert").hide();
         });
     </script>
 }

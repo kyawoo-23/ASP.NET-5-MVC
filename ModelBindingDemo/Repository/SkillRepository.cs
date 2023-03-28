@@ -15,7 +15,7 @@ namespace ModelBindingDemo.Repository
             _appDbContext = appDbContext;
         }
 
-        public bool CheckSkillNameUniqueness(string skillName)
+        public bool IsSkillNameDuplicate(string skillName)
         {
             return _appDbContext.Skills.Any(s => s.SkillName == skillName);
         }
@@ -57,7 +57,7 @@ namespace ModelBindingDemo.Repository
 
         public void Update(Skill skill)
         {
-            throw new System.NotImplementedException();
+            _appDbContext.Entry(skill).State = EntityState.Modified;
         }
     }
 }

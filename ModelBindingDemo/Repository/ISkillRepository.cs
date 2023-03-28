@@ -11,6 +11,6 @@ namespace ModelBindingDemo.Repository
         void Update(Skill skill);
         void Delete(int id);
         void Save();
-        bool CheckSkillNameUniqueness(string skillName);
+        bool IsSkillNameDuplicate(string skillName);
     }
 }

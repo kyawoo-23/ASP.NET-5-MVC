@@ -56,7 +56,11 @@ namespace ModelBindingDemo.Repository
                 .FirstOrDefault(ds => ds.DeveloperId == model.DeveloperId && ds.SkillId == model.SkillId);
             if (exists != null)
             {
-                throw new Exception("Duplicate skill found");
+                throw new Exception("Duplicate data found!");
+            }
+            else if (model.SkillLevel < 1 || model.SkillLevel > 10)
+            {
+                throw new Exception("Skill level must be between 1 and 10!");
             }
             else
             {

@@ -1,7 +1,7 @@
 ﻿@model Note
 @{
     bool IsShowUser = (bool)ViewData["ShowUser"];
-    bool IsShowDeleteButton = (bool)ViewData["ShowDeleteButton"];
+    bool IsShowDeleteButton = (bool)ViewData["ShowNoteButtons"];
 }
 
 <div class="col-12 col-md-6 col-lg-4 mb-3">
@@ -10,9 +10,14 @@
             <h5 class="card-title mt-2"><i class="bi bi-sticky-fill mr-2"></i>@Model.Title</h5>
             @if (IsShowDeleteButton)
             {
-                <button type="button" class="btn btn-outline-danger noteConfirmDelete" data-toggle="modal" data-target="#confirmDeleteModal" data-assigned-id=@Model.Id data-dev-id=@Model.Developer.DeveloperId>
-                    <i class="bi bi-trash-fill"></i>
-                </button>
+                <div>
+                    <a type="button" class="btn btn-outline-dark" asp-action="Edit" asp-controller="Note" asp-route-id="@Model.Id">
+                        <i class="bi bi-pencil-fill"></i>
+                    </a>
+                    <button type="button" class="btn btn-outline-danger noteConfirmDelete" data-toggle="modal" data-target="#confirmDeleteModal" data-assigned-id=@Model.Id data-dev-id=@Model.Developer.DeveloperId>
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                </div>
             }
         </div>
         <div class="card-body">

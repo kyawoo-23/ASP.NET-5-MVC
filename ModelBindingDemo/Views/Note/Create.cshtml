@@ -34,7 +34,7 @@
     <div class="row mb-3">
         <label for="type" class="col-sm-2 col-form-label">Content</label>
         <div class="col-sm-10">
-            <input class="form-control" asp-for="Note.Content">
+            <textarea rows="6" class="form-control" asp-for="Note.Content"></textarea>
             <span asp-validation-for="Note.Content" class="text-danger d-flex justify-content-end"></span>
         </div>
     </div>

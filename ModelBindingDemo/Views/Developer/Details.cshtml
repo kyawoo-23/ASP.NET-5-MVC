@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Details";
     ViewData["ShowUser"] = false;
-    ViewData["ShowDeleteButton"] = true;
+    ViewData["ShowNoteButtons"] = true;
 }
 
 <div class="jumbotron">
@@ -12,12 +12,12 @@
     <div class="d-flex flex-wrap">
         @foreach (DeveloperSkill skill in Model.DeveloperSkills)
         {
-            <div class="bg-dark rounded px-3 py-2 d-flex align-items-center mr-3 mb-3">
+            <a asp-controller="Skill" asp-action="Details" asp-route-id="@skill.SkillId" class="bg-dark rounded px-3 py-2 d-flex align-items-center mr-3 mb-3 text-decoration-none">
                 <div class="text-white text-capitalize">@skill.Skill.SkillName</div>
                 <div class="ml-2">
                     <span class="badge badge-pill badge-light">lvl @skill.SkillLevel</span>
                 </div>
-            </div>
+            </a>
         }
     </div>
     <a class="btn btn-secondary float-right" asp-action="EditSkills" asp-route-id=@Model.Developer.DeveloperId>Edit Skills</a>

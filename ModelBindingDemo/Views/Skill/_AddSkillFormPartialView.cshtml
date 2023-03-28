@@ -11,4 +11,8 @@
         </div>
     </div>
     <span asp-validation-for="SkillName" class="text-danger"></span>
+    @if(TempData["SuccessMessage"] != null)
+    {
+        <span class="text-success">@TempData["SuccessMessage"]</span>
+    }
 </form>
