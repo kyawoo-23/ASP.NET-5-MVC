@@ -7,9 +7,9 @@
     {
         <div class="col-12 mt-3">
             <div class="row">
-                <label class="col-sm-2 col-form-label">Skill Name</label>
+                <label class="col-2 col-form-label">Skill Name</label>
                 <div class="col-4">
-                    <select class="form-control" asp-for="@devSkill.Skill.SkillId">
+                    <select class="form-control" asp-for="@devSkill.Skill.SkillId" disabled>
                         <option value="0" selected disabled>Choose a skill...</option>
                         @foreach (Skill skill in Model.Skills)
                         {
@@ -21,14 +21,14 @@
                 <div class="col-3">
                     <input class="form-control" asp-for="@devSkill.SkillLevel" readonly>
                 </div>
-                <div class="col-1 text-right">
+                @*<div class="col-1 text-right">
                     <button class="btn btn-outline-dark w-100">
                         <i class="bi bi-upload"></i>
                     </button>
-                </div>
-                <div class="col-1 text-right">
+                </div>*@
+                <div class="col-2 text-right">
                     <button class="btn btn-outline-danger w-100 devSkillConfirmDelete" data-toggle="modal" data-target="#confirmDeleteModal" data-assigned-id=@devSkill.DeveloperSkillId>
-                        <i class="bi bi-trash-fill"></i>
+                        <i class="bi bi-trash-fill"></i> Delete
                     </button>
                 </div>
             </div>

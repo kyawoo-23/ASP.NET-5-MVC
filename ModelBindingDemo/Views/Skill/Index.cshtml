@@ -24,15 +24,15 @@
             <div class="bg-dark rounded d-flex justify-content-between align-items-center skillEditGroup">
                 <input asp-for="@skill.SkillId" hidden>
                 <a class="w-100 text-decoration-none" asp-action="Details" asp-route-id="@skill.SkillId">
-                    <input class="text-white text-capitalize pl-3 w-100 h-100 bg-transparent form-control shadow-none border-0 edit-input-@skill.SkillId" value="@skill.SkillName" asp-for="@skill.SkillName" readonly="true" style="cursor: pointer;">
+                    <input class="text-white text-capitalize pl-3 w-100 h-100 bg-transparent form-control shadow-none border-0 edit-input-@skill.SkillId" asp-for="@skill.SkillName" value ="@skill.SkillName" readonly="true" style="cursor: pointer;">
                 </a>
                 <div class="btn-group">
                     <div class="btn btn-dark rounded-0 skillEditBtn" data-edit-id="@skill.SkillId" id='@(skill.SkillId + "editBtn")' style="cursor: pointer;">
                         <i class="bi bi-pencil-square"></i>
                     </div>
 
-                    <div class="btn btn-dark rounded-0 skillCancelBtn" data-edit-id="@skill.SkillId" data-original-value="@skill.SkillName" id='@(skill.SkillId + "cancelBtn")' style="cursor: pointer;">
-                        <i class="bi bi-x"></i>
+                    <div class="btn btn-dark rounded-0 skillCancelBtn" data-edit-id="@skill.SkillId" data-original-value="@skill.SkillName" id='@(skill.SkillId + "cancelBtn")' data-toggle="tooltip" data-placement="bottom" title="Clear" style="cursor: pointer;">
+                        <i class="bi bi-arrow-counterclockwise"></i>
                     </div>
                     <button type="submit" class="btn btn-dark rounded-0 skillUpdateBtn" id='@(skill.SkillId + "updateBtn")' asp-action="Update" asp-controller="Skill">
                         <i class="bi bi-upload"></i>
@@ -56,15 +56,12 @@
         $('.skillEditBtn').on('click', function () {
             let editId = $(this).data('edit-id');
             let title = $(`.edit-input-${editId}`).val();
-            //let flag = $(`.edit-input-${editId}`).prop('readonly');
-
             let editInput = $(`.edit-input-${editId}`);
 
             if (editInput.parent().is("a")) {
                 editInput.unwrap();
             }
 
-            //editInput.unwrap();
             editInput.css("cursor", "text");
             editInput.prop('readonly', false).focus().val('').val(title);
 
@@ -78,7 +75,9 @@
             let originalValue = $(this).data('original-value');
             let editInput = $(`.edit-input-${editId}`);
 
+            editInput.wrap(`<a class="w-100 text-decoration-none" href="/Skill/Details/${editId}"></a>"`);
             editInput.prop('readonly', true).val('').val(originalValue);
+            editInput.css("cursor", "pointer");
 
             $(`#${editId}editBtn`).show();
             $(`#${editId}updateBtn`).hide();
