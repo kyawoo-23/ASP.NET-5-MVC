@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ModelBindingDemo.Models;
+using ModelBindingDemo.Repository;
+using ModelBindingDemo.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,16 +13,26 @@ namespace ModelBindingDemo.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly INoteRepository _noteRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(INoteRepository noteRepository)
         {
-            _logger = logger;
+            _noteRepository = noteRepository;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index([FromQuery]string filterDate)
         {
-            return View();
+            List<Note> notes = _noteRepository.GetAllNotes().OrderByDescending(n => n.CreatedAt).ToList();
+            if (string.IsNullOrEmpty(filterDate))
+            {
+                return View("Index", notes);
+            }
+            else
+            {
+                List<Note> res = notes.Where(n => n.CreatedAt.ToString("yyyy-MM-dd") == filterDate).ToList();
+                return View("Index", res);
+            }
         }
 
         public IActionResult Privacy()

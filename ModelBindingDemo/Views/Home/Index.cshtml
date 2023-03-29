@@ -1,8 +1,38 @@
-﻿@{
+﻿@model List<Note>
+
+@{
     ViewData["Title"] = "Home Page";
+    string prevDate = "";
+    ViewData["ShowUser"] = true;
+    ViewData["ShowNoteButtons"] = false;
+    var fDate = Context.Request.Query["filterDate"];
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<form class="d-flex justify-content-between mb-3" method="get" asp-action="Index" asp-controller="Home">
+    <div class="input-group w-50">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Filter by date</span>
+        </div>
+        <input type="date" id="filterDate" name="filterDate" placeholder="Input date to be searched ..." class="form-control" value="@fDate" required>
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </div>
+    <a class="btn btn-dark" asp-action="Index" asp-controller="Home">
+        <i class="bi bi-arrow-clockwise mr-2"></i>Refresh
+    </a>
+</form>
+
+<div class="row">
+    @foreach (Note note in Model)
+    {
+        if (prevDate != note.CreatedAt.ToShortDateString())
+        {
+            prevDate = note.CreatedAt.ToShortDateString();
+            <div class="col-12 mt-3 mb-2">
+                <h4><i class="bi bi-calendar2-minus mr-3"></i>@note.CreatedAt.ToShortDateString()</h4>
+            </div>
+        }
+        <partial name="_NoteCard" model="note" view-data="ViewData" />
+    }
 </div>
