@@ -1,6 +1,6 @@
 ﻿@model List<DeveloperSkill>
 
-<div class="row align-items-center">
+<div class="row align-items-center flex-wrap">
     <h3 class="pl-3">
         List of developers with
         <span class="text-capitalize badge badge-dark badge-pill px-3 py-1">
@@ -12,7 +12,7 @@
 <div class="row mt-3">
     @foreach (DeveloperSkill devSkill in Model)
     {
-        <div class="col-6 col-md-4 col-lg-3 mb-3">
+        <div class="col-12 col-md-6 col-lg-3 mb-3">
             <div class="card border-secondary">
                 <a class="text-decoration-none text-secondary" asp-controller="Developer" asp-action="Details" asp-route-id="@devSkill.DeveloperId">
                     <div class="card-header d-flex justify-content-between">

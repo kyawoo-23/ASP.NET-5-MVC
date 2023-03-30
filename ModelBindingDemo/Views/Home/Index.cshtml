@@ -8,8 +8,8 @@
     var fDate = Context.Request.Query["filterDate"];
 }
 
-<form class="d-flex justify-content-between mb-3" method="get" asp-action="Index" asp-controller="Home">
-    <div class="input-group w-50">
+<form class="row justify-content-between mb-3" method="get" asp-action="Index" asp-controller="Home">
+    <div class="col-12 col-md-6 input-group w-50">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Filter by date</span>
         </div>
@@ -18,9 +18,11 @@
             <button class="btn btn-primary" type="submit">Search</button>
         </div>
     </div>
-    <a class="btn btn-dark" asp-action="Index" asp-controller="Home">
-        <i class="bi bi-arrow-clockwise mr-2"></i>Refresh
-    </a>
+    <div class="col-12 col-md-3 col-lg-2 text-right mt-3 mt-md-0">
+        <a class="btn btn-dark" asp-action="Index" asp-controller="Home">
+            <i class="bi bi-arrow-clockwise mr-2"></i>Refresh
+        </a>
+    </div>
 </form>
 
 <div class="row">

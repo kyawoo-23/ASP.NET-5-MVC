@@ -5,11 +5,11 @@
     ViewData["ShowNoteButtons"] = true;
 }
 
-<div class="jumbotron">
-    <h1 class="display-4">Hello, @Model.Developer.Name! <small>#@Model.Developer.DeveloperId</small></h1>
+<div class="jumbotron pb-5">
+    <h2 class="display-5"><span class="font-weight-normal">Hello, </span>@Model.Developer.Name! <small>#@Model.Developer.DeveloperId</small></h2>
     <p class="lead">Gender: @Model.Developer.Gender | Type: @Model.Developer.Type</p>
     <hr class="my-4">
-    <div class="d-flex flex-wrap">
+    <div class="d-flex flex-wrap justify-content-center justify-content-md-start">
         @foreach (DeveloperSkill skill in Model.DeveloperSkills)
         {
             <a asp-controller="Skill" asp-action="Details" asp-route-id="@skill.SkillId" class="bg-dark rounded px-3 py-2 d-flex align-items-center mr-3 mb-3 text-decoration-none">
@@ -20,7 +20,9 @@
             </a>
         }
     </div>
-    <a class="btn btn-secondary float-right" asp-action="EditSkills" asp-route-id=@Model.Developer.DeveloperId>Edit Skills</a>
+    <div class="d-flex justify-content-end mt-2">
+        <a class="btn btn-secondary" asp-action="EditSkills" asp-route-id=@Model.Developer.DeveloperId>Edit Skills</a>
+    </div>
 </div>
 
 @if (Model.Developer.Notes.Count() == 0)

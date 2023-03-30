@@ -1,7 +1,8 @@
 ﻿@model Skill
 
-<form method="post" asp-action="Create" asp-controller="Skill">
-    <div class="input-group mb-3 w-50">
+<div class="row">
+<form method="post" asp-action="Create" asp-controller="Skill" class="col-12 col-md-8 col-lg-6">
+    <div class="input-group mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">New Skill</span>
         </div>
@@ -15,4 +16,5 @@
     {
         <span class="text-success">@TempData["SuccessMessage"]</span>
     }
-</form>
+    </form>
+</div>
