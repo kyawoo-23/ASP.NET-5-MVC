@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<IdentityUser> signInManger;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,8 +24,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                      @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        @*<li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>*@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Developer" asp-action="Index">Developers</a>
@@ -35,6 +37,24 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Skill" asp-action="Index">Skills</a>
                         </li>
                     </ul>
+                    @if (signInManger.IsSignedIn(User))
+                    {
+                        <div class="d-flex align-items-center ml-auto">
+                            <span class="mr-md-3">
+                                @User.Identity.Name
+                            </span>
+                            <form method="post" asp-action="Logout" asp-controller="Account">
+                                <button type="submit" class="btn btn-outline-dark">Logout</button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="ml-auto d-flex align-items-center">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                        </div>
+                    }
                 </div>
             </div>
         </nav>
@@ -93,7 +113,7 @@
 
             $('.devSkillConfirmDelete').click(function () {
                 let id = $(this).data('assigned-id');
-                let devId = $(this).data('dev-id'); 
+                let devId = $(this).data('dev-id');
                 confirmDelete("/DeveloperSkill/ConfirmDelete", { "id": id });
             });
 
