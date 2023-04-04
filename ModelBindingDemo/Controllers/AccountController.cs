@@ -67,7 +67,7 @@ namespace ModelBindingDemo.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string ReturnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -75,6 +75,10 @@ namespace ModelBindingDemo.Controllers
 
                 if (result.Succeeded)
                 {
+                    if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                    {
+                        return Redirect(ReturnUrl);
+                    }
                     return RedirectToAction("Index", "Home");
                 }
 

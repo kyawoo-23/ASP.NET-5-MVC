@@ -43,6 +43,7 @@ namespace ModelBindingDemo
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
             services.AddScoped<IDeveloperRepository, DeveloperRepository>();
             services.AddScoped<INoteRepository, NoteRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ModelBindingDemo.Models;
 using ModelBindingDemo.Repository;
@@ -20,6 +21,7 @@ namespace ModelBindingDemo.Controllers
             _noteRepository = noteRepository;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index([FromQuery]string filterDate)
         {
