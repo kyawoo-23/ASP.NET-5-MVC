@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
 using ModelBindingDemo.Models;
+using AutoMapper;
 
 namespace ModelBindingDemo.Controllers
 {
@@ -17,6 +18,7 @@ namespace ModelBindingDemo.Controllers
         private readonly IDeveloperService _devService;
         private readonly ISkillService _skillService;
         private readonly IDeveloperSkillService _devSkillService;
+        private readonly IMapper _mapper;
         //private readonly IDeveloperRepository _devRepository;
         //private readonly ISkillRepository _skillRepository;
         //private readonly IDeveloperSkillRepository _devSkillRepository;
@@ -28,12 +30,12 @@ namespace ModelBindingDemo.Controllers
         //    _devSkillRepository = devSkillRepository;
         //}
 
-        public DeveloperController(IDeveloperService devService, ISkillService skillService, IDeveloperSkillService devSkillService)
+        public DeveloperController(IDeveloperService devService, ISkillService skillService, IDeveloperSkillService devSkillService, IMapper mapper)
         {
             _devService = devService;
             _skillService = skillService;
             _devSkillService = devSkillService;
-
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -96,11 +98,12 @@ namespace ModelBindingDemo.Controllers
         {
             Developer developer = _devService.GetDeveloperById(id);
             List<DeveloperSkill> devSkills = _devSkillService.GetSkillLevelByDevId(id);
-            DeveloperEditSkillsViewModel model = new DeveloperEditSkillsViewModel()
-            {
-                Developer = developer,
-                DeveloperSkills = devSkills
-            };
+            DeveloperEditSkillsViewModel model = _mapper.Map<DeveloperEditSkillsViewModel>((developer, new List<Skill>() , devSkills));
+            //DeveloperEditSkillsViewModel model = new DeveloperEditSkillsViewModel()
+            //{
+            //    Developer = developer,
+            //    DeveloperSkills = devSkills
+            //};
             return View(model);
         }
 
@@ -110,28 +113,15 @@ namespace ModelBindingDemo.Controllers
             Developer developer = _devService.GetDeveloperById(id);
             List<Skill> skills = _skillService.GetAllSkills();
             List<DeveloperSkill> devSkills = _devSkillService.GetSkillLevelByDevId(id);
-            DeveloperEditSkillsViewModel model = new DeveloperEditSkillsViewModel()
-            {
-                Developer = developer,
-                Skills = skills,
-                DeveloperSkills = devSkills
-            };
+            DeveloperEditSkillsViewModel model = _mapper.Map<DeveloperEditSkillsViewModel>((developer, skills, devSkills));
+            //DeveloperEditSkillsViewModel model = new DeveloperEditSkillsViewModel()
+            //{
+            //    Developer = developer,
+            //    Skills = skills,
+            //    DeveloperSkills = devSkills
+            //};
             return View(model);
         }
-
-        //[HttpPost]
-        //public IActionResult EditSkills(DeveloperSkill model, int devId)
-        //{
-        //    DeveloperSkill devSkill = new DeveloperSkill()
-        //    {
-        //        DeveloperId = devId,
-        //        SkillId = model.SkillId,
-        //        SkillLevel = model.SkillLevel,
-        //    };
-        //    _devSkillService.Insert(devSkill);
-        //    //_devSkillRepository.Save();
-        //    return RedirectToAction("Details", new { id = model.DeveloperId });
-        //}
 
         [HttpPost]
         public IActionResult EditSkills(int devId, int[] devSkills, int[] devSkillsLevel)

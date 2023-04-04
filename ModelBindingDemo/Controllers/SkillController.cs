@@ -6,6 +6,7 @@ using ModelBindingDemo.ViewModel;
 using System.Collections.Generic;
 using Dev.Business.Services;
 using ModelBindingDemo.Models;
+using AutoMapper;
 
 namespace ModelBindingDemo.Controllers
 {
@@ -13,11 +14,13 @@ namespace ModelBindingDemo.Controllers
     {
         private readonly ISkillService _skillService;
         private readonly IDeveloperSkillService _devSkillService;
+        private readonly IMapper _mapper;
 
-        public SkillController(ISkillService skillService, IDeveloperSkillService devSkillService)
+        public SkillController(ISkillService skillService, IDeveloperSkillService devSkillService, IMapper mapper)
         {
             _skillService = skillService;
             _devSkillService = devSkillService;
+            _mapper = mapper;
         }
 
         //private readonly ISkillRepository _skillRepository;
@@ -70,11 +73,12 @@ namespace ModelBindingDemo.Controllers
         public IActionResult ConfirmDelete(int id)
         {
             Skill skill = _skillService.GetSkillById(id);
-            ConfirmDeleteModal model = new ConfirmDeleteModal()
-            {
-                Id = skill.SkillId,
-                Name = skill.SkillName
-            };
+            ConfirmDeleteModal model = _mapper.Map<Skill, ConfirmDeleteModal>(skill);
+            //ConfirmDeleteModal model = new ConfirmDeleteModal()
+            //{
+            //    Id = skill.SkillId,
+            //    Name = skill.SkillName
+            //};
             return PartialView("_ConfirmDeleteModalPartial", model);
         }
 

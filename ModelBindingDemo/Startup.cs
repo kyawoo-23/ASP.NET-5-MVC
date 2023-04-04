@@ -29,6 +29,8 @@ namespace ModelBindingDemo
             services.AddControllersWithViews();
             services.AddDbContext<ModelBindingDemo.Data.AppDbContext>();
 
+            services.AddAutoMapper(typeof(Startup));
+
             // Data Access Layer
             services.AddScoped<IDeveloperRepository, DeveloperRepository>();
             services.AddScoped<INoteRepository, NoteRepository>();

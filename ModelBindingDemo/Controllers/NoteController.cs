@@ -5,6 +5,7 @@ using ModelBindingDemo.Repository;
 using ModelBindingDemo.ViewModel;
 using System.Collections.Generic;
 using ModelBindingDemo.Models;
+using AutoMapper;
 
 namespace ModelBindingDemo.Controllers
 {
@@ -12,10 +13,13 @@ namespace ModelBindingDemo.Controllers
     {
         private readonly INoteService _noteService;
         private readonly IDeveloperService _devService;
-        public NoteController(INoteService noteService, IDeveloperService devService)
+        private readonly IMapper _mapper;
+
+        public NoteController(INoteService noteService, IDeveloperService devService, IMapper mapper)
         {
             _noteService = noteService;
             _devService = devService;
+            _mapper = mapper;
         }
         //private readonly INoteRepository _noteRepository;
         //private readonly IDeveloperRepository _developerRepository;
@@ -36,10 +40,11 @@ namespace ModelBindingDemo.Controllers
         public IActionResult Create()
         {
             List<Developer> developers = _devService.GetAllDevelopers();
-            DeveloperNoteViewModel model = new DeveloperNoteViewModel()
-            {
-                Developer = developers
-            };
+            DeveloperNoteViewModel model = _mapper.Map<List<Developer>, DeveloperNoteViewModel>(developers);
+            //DeveloperNoteViewModel model = new DeveloperNoteViewModel()
+            //{
+            //    Developer = developers
+            //};
             return View(model);
         }
 
@@ -62,12 +67,13 @@ namespace ModelBindingDemo.Controllers
         public IActionResult ConfirmDelete(int id, int devId)
         {
             Note note = _noteService.GetNoteById(id);
-            ConfirmDeleteModal model = new ConfirmDeleteModal()
-            {
-                Id = note.Id,
-                Name = note.Title,
-                refDevId = devId
-            };
+            ConfirmDeleteModal model = _mapper.Map<Note, ConfirmDeleteModal>(note);
+            //ConfirmDeleteModal model = new ConfirmDeleteModal()
+            //{
+            //    Id = note.Id,
+            //    Name = note.Title,
+            //    refDevId = devId
+            //};
             return PartialView("_ConfirmDeleteModalPartial", model);
         }
 
