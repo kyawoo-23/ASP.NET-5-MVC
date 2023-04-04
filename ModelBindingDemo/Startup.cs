@@ -1,3 +1,4 @@
+using Dev.Business.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,14 +27,19 @@ namespace ModelBindingDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<ModelBindingDemo.Data.AppDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
+            services.AddDbContext<ModelBindingDemo.Data.AppDbContext>();
+
+            // Data Access Layer
             services.AddScoped<IDeveloperRepository, DeveloperRepository>();
             services.AddScoped<INoteRepository, NoteRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<IDeveloperSkillRepository, DeveloperSkillRepository>();
+
+            // Business Layer
+            services.AddScoped<IDeveloperService, DeveloperService>();
+            services.AddScoped<IDeveloperSkillService, DeveloperSkillService>();
+            services.AddScoped<INoteService, NoteService>();
+            services.AddScoped<ISkillService, SkillService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

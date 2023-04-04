@@ -1,31 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dev.Business.Services;
+using Microsoft.AspNetCore.Mvc;
 using ModelBindingDemo.Data;
-using ModelBindingDemo.Models;
+using Dev.Entities.Models;
 using ModelBindingDemo.Repository;
 using ModelBindingDemo.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
+using ModelBindingDemo.Models;
 
 namespace ModelBindingDemo.Controllers
 {
     public class DeveloperController : Controller
     {
-        private readonly IDeveloperRepository _devRepository;
-        private readonly ISkillRepository _skillRepository;
-        private readonly IDeveloperSkillRepository _devSkillRepository;
+        private readonly IDeveloperService _devService;
+        private readonly ISkillService _skillService;
+        private readonly IDeveloperSkillService _devSkillService;
+        //private readonly IDeveloperRepository _devRepository;
+        //private readonly ISkillRepository _skillRepository;
+        //private readonly IDeveloperSkillRepository _devSkillRepository;
 
-        public DeveloperController(IDeveloperRepository devRepository, ISkillRepository skillRepository, IDeveloperSkillRepository devSkillRepository)
+        //public DeveloperController(IDeveloperRepository devRepository, ISkillRepository skillRepository, IDeveloperSkillRepository devSkillRepository)
+        //{
+        //    _devRepository = devRepository;
+        //    _skillRepository = skillRepository;
+        //    _devSkillRepository = devSkillRepository;
+        //}
+
+        public DeveloperController(IDeveloperService devService, ISkillService skillService, IDeveloperSkillService devSkillService)
         {
-            _devRepository = devRepository;
-            _skillRepository = skillRepository;
-            _devSkillRepository = devSkillRepository;
+            _devService = devService;
+            _skillService = skillService;
+            _devSkillService = devSkillService;
+
         }
 
         public IActionResult Index()
         {
-            List<Developer> res = _devRepository.GetAllDevelopers();
+            List<Developer> res = _devService.GetAllDevelopers();
             return View(res);
         }
 
@@ -40,8 +53,7 @@ namespace ModelBindingDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                _devRepository.Insert(developer);
-                _devRepository.Save();
+                _devService.Insert(developer);
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -50,29 +62,27 @@ namespace ModelBindingDemo.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Developer data = _devRepository.GetDeveloperById(id);
+            Developer data = _devService.GetDeveloperById(id);
             return data != null ? View(data) : RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
         public IActionResult Edit(Developer developer)
         {
-            _devRepository.Update(developer);
-            _devRepository.Save();
+            _devService.Update(developer);
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int id)
         {
-            _devRepository.Delete(id);
-            _devRepository.Save();
+            _devService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
         public IActionResult ConfirmDelete(int id)
         {
-            Developer dev = _devRepository.GetDeveloperById(id);
+            Developer dev = _devService.GetDeveloperById(id);
             ConfirmDeleteModal model = new ConfirmDeleteModal()
             {
                 Id = dev.DeveloperId,
@@ -84,8 +94,8 @@ namespace ModelBindingDemo.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            Developer developer = _devRepository.GetDeveloperById(id);
-            List<DeveloperSkill> devSkills = _devSkillRepository.GetSkillLevelByDevId(id);
+            Developer developer = _devService.GetDeveloperById(id);
+            List<DeveloperSkill> devSkills = _devSkillService.GetSkillLevelByDevId(id);
             DeveloperEditSkillsViewModel model = new DeveloperEditSkillsViewModel()
             {
                 Developer = developer,
@@ -97,9 +107,9 @@ namespace ModelBindingDemo.Controllers
         [HttpGet]
         public IActionResult EditSkills(int id)
         {
-            Developer developer = _devRepository.GetDeveloperById(id);
-            List<Skill> skills = _skillRepository.GetAllSkills();
-            List<DeveloperSkill> devSkills = _devSkillRepository.GetSkillLevelByDevId(id);
+            Developer developer = _devService.GetDeveloperById(id);
+            List<Skill> skills = _skillService.GetAllSkills();
+            List<DeveloperSkill> devSkills = _devSkillService.GetSkillLevelByDevId(id);
             DeveloperEditSkillsViewModel model = new DeveloperEditSkillsViewModel()
             {
                 Developer = developer,
@@ -112,15 +122,16 @@ namespace ModelBindingDemo.Controllers
         //[HttpPost]
         //public IActionResult EditSkills(DeveloperSkill model, int devId)
         //{
-        //    DeveloperSkill devSkill = new DeveloperSkill() {
+        //    DeveloperSkill devSkill = new DeveloperSkill()
+        //    {
         //        DeveloperId = devId,
         //        SkillId = model.SkillId,
         //        SkillLevel = model.SkillLevel,
         //    };
-        //    _devSkillRepository.Insert(devSkill);
-        //    _devSkillRepository.Save();
+        //    _devSkillService.Insert(devSkill);
+        //    //_devSkillRepository.Save();
         //    return RedirectToAction("Details", new { id = model.DeveloperId });
-        //}        
+        //}
 
         [HttpPost]
         public IActionResult EditSkills(int devId, int[] devSkills, int[] devSkillsLevel)
@@ -135,9 +146,9 @@ namespace ModelBindingDemo.Controllers
                         SkillId = devSkills[i],
                         SkillLevel = devSkillsLevel[i],
                     };
-                    _devSkillRepository.Insert(devSkill);
+                    _devSkillService.Insert(devSkill);
                 }
-                _devSkillRepository.Save();
+                //_devSkillRepository.Save();
                 return Json(new
                 {
                     success = true,
@@ -145,7 +156,7 @@ namespace ModelBindingDemo.Controllers
                     redirectToUrl = Url.Action("Details", "Developer", new { id = devId })
                 });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -154,7 +165,7 @@ namespace ModelBindingDemo.Controllers
         [HttpPost]
         public IActionResult GetSkillSelectorPartialView()
         {
-            List<Skill> skills = _skillRepository.GetAllSkills();
+            List<Skill> skills = _skillService.GetAllSkills();
             SkillSelectorPartialViewModel model = new SkillSelectorPartialViewModel()
             {
                 Skills = skills

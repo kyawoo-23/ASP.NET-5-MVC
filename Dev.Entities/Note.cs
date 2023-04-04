@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ModelBindingDemo.Models
+namespace Dev.Entities.Models
 {
     public class Note
     {

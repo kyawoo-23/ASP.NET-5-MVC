@@ -1,4 +1,4 @@
-﻿using ModelBindingDemo.Models;
+﻿using Dev.Entities.Models;
 using System.Collections.Generic;
 
 namespace ModelBindingDemo.ViewModel

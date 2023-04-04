@@ -1,29 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ModelBindingDemo.Models;
+using Dev.Entities.Models;
 using ModelBindingDemo.Repository;
+using Dev.Business.Services;
+using ModelBindingDemo.Models;
 
 namespace ModelBindingDemo.Controllers
 {
     public class DeveloperSkillController : Controller
     {
-        private readonly IDeveloperSkillRepository _devSkillRepository;
-        public DeveloperSkillController(IDeveloperSkillRepository devSkillRepository)
+        private readonly IDeveloperSkillService _devSkillService;
+        public DeveloperSkillController(IDeveloperSkillService devSkillService)
         {
-            _devSkillRepository = devSkillRepository;
+            _devSkillService = devSkillService;
         }
+        //private readonly IDeveloperSkillRepository _devSkillRepository;
+        //public DeveloperSkillController(IDeveloperSkillRepository devSkillRepository)
+        //{
+        //    _devSkillRepository = devSkillRepository;
+        //}
 
         public IActionResult Delete(int id, int refDevId)
         {
-            _devSkillRepository.Delete(id);
-            _devSkillRepository.Save();
+            _devSkillService.Delete(id);
+            //_devSkillRepository.Save();
             return RedirectToAction("EditSkills", "Developer", new { id = refDevId });
         }
-
 
         [HttpPost]
         public IActionResult ConfirmDelete(int id)
         {
-            DeveloperSkill devSkill = _devSkillRepository.GetDeveloperSkillById(id);
+            DeveloperSkill devSkill = _devSkillService.GetDeveloperSkillById(id);
             ConfirmDeleteModal model = new ConfirmDeleteModal()
             {
                 Id = devSkill.DeveloperSkillId,

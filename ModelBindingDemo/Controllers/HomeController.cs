@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ModelBindingDemo.Models;
+using Dev.Entities.Models;
 using ModelBindingDemo.Repository;
 using ModelBindingDemo.ViewModel;
 using System;
@@ -8,22 +8,31 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Dev.Business.Services;
+using ModelBindingDemo.Models;
 
 namespace ModelBindingDemo.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly INoteRepository _noteRepository;
+        private readonly INoteService _noteService;
 
-        public HomeController(INoteRepository noteRepository)
+        public HomeController(INoteService noteService)
         {
-            _noteRepository = noteRepository;
+            _noteService = noteService;
         }
 
+        //private readonly INoteRepository _noteRepository;
+
+        //public HomeController(INoteRepository noteRepository)
+        //{
+        //    _noteRepository = noteRepository;
+        //}
+
         [HttpGet]
-        public IActionResult Index([FromQuery]string filterDate)
+        public IActionResult Index([FromQuery] string filterDate)
         {
-            List<Note> notes = _noteRepository.GetAllNotes().OrderByDescending(n => n.CreatedAt).ToList();
+            List<Note> notes = _noteService.GetAllNotes().OrderByDescending(n => n.CreatedAt).ToList();
             if (string.IsNullOrEmpty(filterDate))
             {
                 return View("Index", notes);

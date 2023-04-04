@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ModelBindingDemo.Models
+namespace Dev.Entities.Models
 {
     [Index(nameof(SkillName), IsUnique = true)]
     public class Skill

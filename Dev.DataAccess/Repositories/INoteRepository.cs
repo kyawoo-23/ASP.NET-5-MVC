@@ -1,16 +1,13 @@
-﻿using ModelBindingDemo.Models;
-using ModelBindingDemo.ViewModel;
+﻿using Dev.DataAccess.Repositories;
+using Dev.Entities.Models;
 using System.Collections.Generic;
 
 namespace ModelBindingDemo.Repository
 {
-    public interface INoteRepository
+    public interface INoteRepository : IBaseRepository<Note>
     {
         List<Note> GetAllNotes();
         Note GetNoteById(int id);
-        void Insert(Note model);
         void Update(Note note);
-        void Delete(int id);
-        void Save();
     }
 }

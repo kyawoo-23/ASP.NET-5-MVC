@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ModelBindingDemo.Models
+namespace Dev.Entities.Models
 {
     public class DeveloperSkill
     {
