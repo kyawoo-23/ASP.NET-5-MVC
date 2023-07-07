@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ModelBindingDemo.Data;
 using ModelBindingDemo.Repository;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace ModelBindingDemo
         {
             services.AddControllersWithViews();
             services.AddDbContext<ModelBindingDemo.Data.AppDbContext>();
+            //services.AddDbContext<ModelBindingDemo.Data.AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddAutoMapper(typeof(Startup));
 

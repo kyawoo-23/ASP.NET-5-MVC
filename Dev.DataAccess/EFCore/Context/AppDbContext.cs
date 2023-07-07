@@ -9,7 +9,7 @@ namespace ModelBindingDemo.Data
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-L27SV6P\\SQLEXPRESS;Database=EFCoreTesting;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=KYAW-OO\\SQLEXPRESS;Database=EFCoreTesting;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
         }
 

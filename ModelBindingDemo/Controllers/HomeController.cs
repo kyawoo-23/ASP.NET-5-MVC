@@ -16,10 +16,12 @@ namespace ModelBindingDemo.Controllers
     public class HomeController : Controller
     {
         private readonly INoteService _noteService;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(INoteService noteService)
+        public HomeController(INoteService noteService, ILogger<HomeController> logger)
         {
             _noteService = noteService;
+            _logger = logger;
         }
 
         //private readonly INoteRepository _noteRepository;
@@ -35,6 +37,8 @@ namespace ModelBindingDemo.Controllers
             List<Note> notes = _noteService.GetAllNotes().OrderByDescending(n => n.CreatedAt).ToList();
             if (string.IsNullOrEmpty(filterDate))
             {
+                //_logger.LogWarning($"Home Controller Index action executed on: {DateTime.Now}");
+                _logger.LogWarning("Home controller {@Notes} on {Created}", notes, DateTime.Now);
                 return View("Index", notes);
             }
             else
